@@ -10,8 +10,13 @@ from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.preprocessing.text import Tokenizer, text_to_word_sequence
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 
+from nltk.sentiment.vader import SentimentIntensityAnalyzer
 
-def processing_tensor():
+# import nltk
+# nltk.download('vader_lexicon')
+
+
+def processing_tensor_LSTM():
     with open('files/train_data_true', 'r', encoding='utf-8') as f:
         texts_true = f.readlines()
         texts_true[0] = texts_true[0].replace('\ufeff', '')  # убираем первый невидимый символ
@@ -67,7 +72,7 @@ def processing_tensor():
         words = [reverse_word_map.get(letter) for letter in list_of_indices]
         return (words)
 
-    t = "Я люблю позитивное настроение".lower()
+    t = "Я люблю тебя".lower()
     data = tokenizer.texts_to_sequences([t])
     data_pad = pad_sequences(data, maxlen=max_text_len)
     print(sequence_to_text(data[0]))
@@ -76,8 +81,14 @@ def processing_tensor():
     print(res, np.argmax(res), sep='\n')
 
 
+def processing_vader():
+    vader = SentimentIntensityAnalyzer()
+    print(vader.polarity_scores("I'm glad to see you"))
+
+
 def main():
-    pass
+    processing_tensor_LSTM()
+    processing_vader()
 
 
 if __name__ == '__main__':
